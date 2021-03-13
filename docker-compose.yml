@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  dmz:
+    image: trajano/oidc-proxy
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: any
+        delay: 10s
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.dmz.rule=Host(`trajano.net`)
+        - traefik.http.routers.dmz.entrypoints=https
+        - traefik.http.routers.dmz.priority=200
+        - traefik.http.services.dmz.loadbalancer.server.port=80
+    environment:
+      SERVER_NAME: trajano.net
+      SERVICE_NAME: whoami
+      OIDC_PROVIDER_METADATA_URL: https://accounts.google.com/.well-known/openid-configuration
+      OIDC_CLIENT_ID: "<my client id>"
+      OIDC_CLIENT_SECRET: "<my client secret>"
+      OIDC_REDIRECT_URI: /cb
+      OIDC_CRYPTO_PASSPHRASE: exec:/random_password
+      OIDC_SESSION_INACTIVITY_TIMEOUT: 2592000
+      OIDC_SESSION_MAX_DURATION: 0
+      TZ: America/Toronto
+    networks:
+      - traefik
+      - default 
+      - intranet
+  whoami:
+    image: containous/whoami
+    networks:
+      - intranet
+networks:
+  traefik:
+    external: true
+  intranet:
+    internal: true
+    name: intranet
+    attachable: true
+  default:
+    internal: false # allow access to the Internet
+    attachable: false
