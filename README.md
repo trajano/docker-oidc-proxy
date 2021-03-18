@@ -38,3 +38,5 @@ For convenience, the image provides `/random_password` that generates a random p
 `SERVER_NAME` Hostname and port that the server uses to identify itself.  This must 
 
 `SERVICE_NAME` The name of the backend service that is being proxied.
+
+`SERVICE_PORT` The port number of the backend service that is being proxied.
