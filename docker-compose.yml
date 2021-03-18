@@ -18,6 +18,7 @@ services:
     environment:
       SERVER_NAME: trajano.net
       SERVICE_NAME: whoami
+      SERVICE_PORT: 80
       OIDC_PROVIDER_METADATA_URL: https://accounts.google.com/.well-known/openid-configuration
       OIDC_CLIENT_ID: "<my client id>"
       OIDC_CLIENT_SECRET: "<my client secret>"
